@@ -63,3 +63,28 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
   }
 });
+//компоненты табов
+//выбор вкладок
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+//добавление обработчиков событий
+tabsContainer.addEventListener('click', function (e) {
+  const clicked = e.target.closest('.operations__tab'); //чтобы выбрать все содержимое кнопки
+  // console.log(clicked);
+
+  if (!clicked) return;
+
+  //Удаление класса active со всех
+  tabs.forEach(t => t.classList.remove('operations__tab--active'));
+  tabsContent.forEach(c => c.classList.remove('operations__content--active'));
+  //После удаления всех active добавляем этот класс на определенную нажатую кнопку
+
+  clicked.classList.add('operations__tab--active');
+
+  //активация области содержимого
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
+});
