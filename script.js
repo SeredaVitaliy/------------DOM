@@ -215,3 +215,30 @@ allSection.forEach(function (section) {
   //добавление класса section--hidden ко всем секциям
   section.classList.add('section--hidden');
 });
+// lazy loading images - отложенная загрузка изображений
+//изначально установлены в разметку картинки с низким разрешением
+//выбираем изображения, у которых есть атрибут data-src
+const imgTarget = document.querySelectorAll('img[data-src]');
+
+const loadImg = function (entries, observer) {
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) return;
+  // замена атрибута
+  entry.target.src = entry.target.dataset.src;
+  //удаление класса размытого фильтра
+  //Делаем так, чтобы все работало только после полной загрузки картинки.
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+  //прекращение наблюдений
+  observer.unobserve(entry.target);
+};
+
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px',
+});
+
+imgTarget.forEach(img => imgObserver.observe(img));
