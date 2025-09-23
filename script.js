@@ -191,3 +191,27 @@ const headerObserver = new IntersectionObserver(stickyNav, {
 });
 
 headerObserver.observe(header);
+
+//Эффект появления секций
+//Нужно удалять класс section--hidden по мере приблежения к каждой секции
+//выберем все разделы
+const allSection = document.querySelectorAll('.section');
+
+const revealSection = function (entries, observer) {
+  //создание основной логики
+  const [entry] = entries;
+  //чтобы узнать какой именно раздел пересекает экран просмотра
+  if (!entry.isIntersecting) return; // чтобы первая секция тоже прогружалась не сразу
+  entry.target.classList.remove('section--hidden');
+  observer.unobserve(entry.target); //чтобы не дальше не просматривались секции
+};
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15, //раздел будет виден только тогда, когда он будет виден на 15%
+});
+//перебор списка узлов
+allSection.forEach(function (section) {
+  sectionObserver.observe(section);
+  //добавление класса section--hidden ко всем секциям
+  section.classList.add('section--hidden');
+});
