@@ -88,3 +88,76 @@ tabsContainer.addEventListener('click', function (e) {
     .querySelector(`.operations__content--${clicked.dataset.tab}`)
     .classList.add('operations__content--active');
 });
+//Эффект для элементов навигации в шапке страницы.
+const nav = document.querySelector('.nav');
+
+nav.addEventListener('mouseover', function (e) {
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    //выбираем все элементы
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    //изменяем непрозрачность для всех дочерних элементов
+    siblings.forEach(el => {
+      if (el !== link) el.style.opacity = 0.5;
+    });
+    logo.style.opacity = 0.5;
+  }
+});
+
+//отмена применения непрозрачности
+nav.addEventListener('mouseout', function (e) {
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    //выбираем все элементы
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    //изменяем непрозрачность для всех дочерних элементов
+    siblings.forEach(el => {
+      if (el !== link) el.style.opacity = 1;
+    });
+    logo.style.opacity = 1;
+  }
+});
+/*
+рефакторинг(как можно было сделать по-другому)
+const handleHover = function (e, opacity) {
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    //выбираем все элементы
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    //изменяем непрозрачность для всех дочерних элементов
+    siblings.forEach(el => {
+      if (el !== link) el.style.opacity = opacity;
+    });
+    logo.style.opacity = opacity;
+  }
+};
+nav.addEventListener('mouseover', function (e) {
+  handleHover(e, 0.5);
+});
+nav.addEventListener('mouseout', function (e) {
+  handleHover(e, 1);
+});
+
+//еще один способ
+const handleHover = function (e) {
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    //выбираем все элементы
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    //изменяем непрозрачность для всех дочерних элементов
+    siblings.forEach(el => {
+      if (el !== link) el.style.opacity = this;
+    });
+    logo.style.opacity = this;
+nav.addEventListener('mouseover', handleHover.bind(0.5))
+nav.addEventListener('mouseover', handleHover.bind(1))
+
+*/
