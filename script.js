@@ -145,6 +145,7 @@ nav.addEventListener('mouseout', function (e) {
 });
 
 //еще один способ
+
 const handleHover = function (e) {
   if (e.target.classList.contains('nav__link')) {
     const link = e.target;
@@ -161,3 +162,32 @@ nav.addEventListener('mouseover', handleHover.bind(0.5))
 nav.addEventListener('mouseover', handleHover.bind(1))
 
 */
+
+//Прикрепление панели навигации до определенного места на странице при прокрутке(липкая навигация)
+//метод, который будет нагружать производительность
+//динамически вычислим значение высоты
+const initialCoords = section1.getBoundingClientRect();
+
+window.addEventListener('scroll', function () {
+  if (this.window.scrollY > initialCoords.top) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+});
+//другой способ через API intersection observer
+//чтобы происходило тогда, когда заголовок покидает поле зрения
+const header = document.querySelector('.header');
+// расчитаем высоту rootMargin динамически
+const navHeigth = nav.getBoundingClientRect().height;
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  console.log(entry);
+  //
+  if (!entry.isIntersecting) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+};
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeigth}px`, //чтобы шапка появилась чуть выше, как только начинается блок секции
+});
+
+headerObserver.observe(header);
